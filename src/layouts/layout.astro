@@ -1,0 +1,22 @@
+---
+import { ViewTransitions } from "astro:transitions";
+import Navigation from "../components/navigation.svelte";
+---
+
+
+<!DOCTYPE html>
+<html lang="es_ES">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>X - With Astro</title>
+        <link rel="icon" href="/x-astro.webp">
+        <ViewTransitions />
+    </head>
+    <body class="bg-slate-700 text-white text-[17px] font-sans">
+        <div class="border-slate-500 border-x-2 min-h-[100vh] max-w-[40em]">
+            <Navigation />
+            <slot />
+        </div>
+    </body>
+</html>
