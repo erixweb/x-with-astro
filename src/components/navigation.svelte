@@ -8,7 +8,7 @@
             <a href="/">
                 <Twitter />
             </a>
-            Home
+            Inicio
         </div>
     </erik-wrap>
 </nav>

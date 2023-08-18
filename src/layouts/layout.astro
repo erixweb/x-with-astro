@@ -3,20 +3,40 @@ import { ViewTransitions } from "astro:transitions";
 import Navigation from "../components/navigation.svelte";
 ---
 
-
 <!DOCTYPE html>
 <html lang="es_ES">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>X - With Astro</title>
-        <link rel="icon" href="/x-astro.webp">
-        <ViewTransitions />
-    </head>
-    <body class="bg-slate-700 text-white text-[17px] font-sans">
-        <div class="border-slate-500 border-x-2 min-h-[100vh] max-w-[40em]">
-            <Navigation />
-            <slot />
-        </div>
-    </body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X - With Astro</title>
+    <link rel="icon" href="/x-astro.webp" />
+    <ViewTransitions />
+  </head>
+  <body class="bg-slate-700 text-white text-[17px] font-sans flex items-start">
+    <aside
+      class="max-w-[250px] w-full h-full min-h-[100vh] mr-0 p-[20px] flex flex-col items-start justify-start"
+    >
+      <div class="wrapper flex flex-col mt-0 w-full gap-[20px]">
+          <a
+            href="/"
+            class="hover:bg-slate-800 w-full p-[12px] bg-transparent duration-200 rounded-full mt-0"
+          >
+            Inicio
+          </a>
+          <a
+            href="/"
+            class="hover:bg-slate-800 w-full p-[12px] bg-transparent duration-200 rounded-full mt-0"
+          >
+            Inicio
+          </a>
+      </div>
+    </aside>
+    <div class="border-slate-500 border-x-2 min-h-[100vh] w-full max-w-[40em]">
+      <Navigation />
+
+      <slot />
+    </div>
+    <aside class="max-w-[250px] w-full h-full min-h-[100vh] ml-0">
+    </aside>
+  </body>
 </html>
