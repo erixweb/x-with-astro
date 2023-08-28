@@ -25,7 +25,8 @@ const { userFullName, username, content, id } = Astro.props
         <p>
             {content}
         </p>
-        <TweetButtons 
+        <TweetButtons
+            id={id}
             client:load
         />
     </div>
