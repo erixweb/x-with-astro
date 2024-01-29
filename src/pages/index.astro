@@ -1,24 +1,38 @@
 ---
+import { turso } from "../turso"
+import "../styles/main.css"
 import Layout from "../layouts/layout.astro"
 import Post from "../components/post.astro"
 import ComposePost from "../components/compose-post.svelte"
-import "../styles/main.css"
+import { getSession } from "auth-astro/server"
+
+
+const session = await getSession(Astro.request)
+console.log(session)
+/* turso.execute(`CREATE TABLE IF NOT EXISTS posts (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		user_id INTEGER,
+		message VARCHAR(250),
+		date TIMESTAMP
+		)`) */
 ---
 
 <Layout>
 	<main class="max-w-[40em] p-[16px] flex flex-col gap-[20px]">
-		<ComposePost />
-		<Post 
-			userFullName={"Erik"}
-			username={"@erixweb"}
-			content={"Hola!!!!!!!"}
-			id="1"
-		/>
-		<Post 
-			userFullName={"Erik"}
-			username={"@erixweb"}
-			content={"Hola!!!!!!!"}
-			id="2"
-		/>
+		<ComposePost client:load />
+		<Post userFullName={"Erik"} username={"@erixweb"} content={"Hola!!!!!!!"} id="1" />
+		<Post userFullName={"Erik"} username={"@erixweb"} content={"Hola!!!!!!!"} id="2" />
 	</main>
+	<button id="login">Click to login</button>
+	<script>
+		const { signIn } = await import("auth-astro/client")
+		const $button = document.getElementById("login")
+
+		$button?.addEventListener("click", async (ev) => {
+			ev.preventDefault()
+
+			await signIn('github')
+		})
+
+	</script>
 </Layout>
