@@ -10,14 +10,18 @@ import { getSession } from "auth-astro/server"
 const session = await getSession(Astro.request)
 //console.log(session)
 //await turso.execute("DROP TABLE posts")
+//await turso.execute("DELETE * FROM posts")
 await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_name TEXT,
 		user_photo TEXT,
-		message TEXT
-				)`)
+		message TEXT,
+		timestamp DATE DEFAULT (datetime('now','localtime'))
+)`)
 
-const { rows } = await turso.execute("SELECT id, user_name, user_photo, message FROM posts")
+const { rows } = await turso.execute("SELECT id, user_name, user_photo, message, timestamp FROM posts ORDER BY timestamp DESC")
+
+
 ---
 
 <Layout>
@@ -40,7 +44,7 @@ const { rows } = await turso.execute("SELECT id, user_name, user_photo, message 
 		<ComposePost client:load />
 		{
 			rows.map((post) => (
-				<Post userFullName={`${post.user_name}`} content={`${post.message}`} />
+				<Post userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} />
 			))
 		}
 	</main>

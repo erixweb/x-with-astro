@@ -6,9 +6,27 @@ interface Props {
     userFullName: string,
     username: string,
     content: string,
+    date: string
 }
 
-const { userFullName, username, content, id } = Astro.props
+const { userFullName, username, content, id, date } = Astro.props
+
+const getTimeDiff = (date: any) => {
+    const postDate = new Date(date)
+    const currentDate = new Date()
+
+    console.log(currentDate.getDate() - postDate.getDate())
+    if ((postDate.getDate() - currentDate.getDate()) === 0) {
+        if ((postDate.getMinutes() - currentDate.getMinutes()) === 0) {
+            return `${currentDate.getSeconds() - postDate.getSeconds()}s`
+        } else {
+            return `${currentDate.getMinutes() - postDate.getMinutes()}min`
+        }
+    } else {
+        return `${postDate.getHours() - currentDate.getHours()}h`
+    }
+
+} 
 ---
 
 <div class="flex justify-start bg-slate-700 p-[16px] rounded-[12px] w-full">
@@ -20,6 +38,10 @@ const { userFullName, username, content, id } = Astro.props
             <h3>{userFullName}</h3>
             <p class="ml-[10px] text-slate-400">
                 {username}
+            </p>
+            · 
+            <p class="ml-[10px] text-slate-400">
+                {getTimeDiff(date)}
             </p>
         </div>
         <p>
