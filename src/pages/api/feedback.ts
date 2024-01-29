@@ -8,7 +8,7 @@ export const POST: APIRoute = async ({ request }) => {
     const user_name = session?.user?.name
     const user_photo = session?.user?.image
 	const message = data.get("message")
-    if (!session) return new Response(JSON.stringify({
+    if (!session || !message) return new Response(JSON.stringify({
         message: "error"
     }))
     const string = `INSERT INTO posts(user_name, user_photo, message) VALUES ("${user_name}", "${user_photo}", "${message}");`
