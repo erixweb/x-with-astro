@@ -6,10 +6,11 @@ interface Props {
     userFullName: string,
     username: string,
     content: string,
-    date: string
+    date: string,
+    profilePicture: string
 }
 
-const { userFullName, username, content, id, date } = Astro.props
+const { userFullName, username, content, id, date, profilePicture} = Astro.props
 
 const getTimeDiff = (date: any) => {
     const postDate = new Date(date)
@@ -31,7 +32,7 @@ const getTimeDiff = (date: any) => {
 
 <div class="flex justify-start bg-slate-700 p-[16px] rounded-[12px] w-full">
     <div class="w-[70px] ml-0 mt-0">
-        <img src="https://avatars.githubusercontent.com/u/121383162?v=4" alt="Imagen de perfil del usuario {username}" class="rounded-full w-[60px] h-[60px]">
+        <img src={profilePicture} alt="Imagen de perfil del usuario {username}" class="rounded-full w-[60px] h-[60px]">
     </div>
     <div class="w-full ml-[20px]">
         <div class="flex">

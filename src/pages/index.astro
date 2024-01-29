@@ -44,7 +44,7 @@ const { rows } = await turso.execute("SELECT id, user_name, user_photo, message,
 		<ComposePost client:load />
 		{
 			rows.map((post) => (
-				<Post userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} />
+				<Post userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} />
 			))
 		}
 	</main>
