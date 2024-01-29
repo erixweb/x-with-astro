@@ -6,22 +6,30 @@ import Post from "../components/post.astro"
 import ComposePost from "../components/compose-post.svelte"
 import { getSession } from "auth-astro/server"
 
-
 const session = await getSession(Astro.request)
-console.log(session)
-/* turso.execute(`CREATE TABLE IF NOT EXISTS posts (
+//console.log(session)
+//await turso.execute("DROP TABLE posts")
+await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
-		user_id INTEGER,
-		message VARCHAR(250),
-		date TIMESTAMP
-		)`) */
+		user_name TEXT,
+		user_photo TEXT,
+		message TEXT
+				)`)
+
+const { rows } = await turso.execute("SELECT id, user_name, user_photo, message FROM posts")
+
+console.log(rows)
 ---
 
 <Layout>
 	<main class="max-w-[40em] p-[16px] flex flex-col gap-[20px]">
 		<ComposePost client:load />
-		<Post userFullName={"Erik"} username={"@erixweb"} content={"Hola!!!!!!!"} id="1" />
-		<Post userFullName={"Erik"} username={"@erixweb"} content={"Hola!!!!!!!"} id="2" />
+		{rows.map((post) => (
+			<Post 
+				userFullName={`${post.user_name}`}
+				content={`${post.message}`}
+			/>
+		))}
 	</main>
 	<button id="login">Click to login</button>
 	<script>
@@ -31,8 +39,7 @@ console.log(session)
 		$button?.addEventListener("click", async (ev) => {
 			ev.preventDefault()
 
-			await signIn('github')
+			await signIn("github")
 		})
-
 	</script>
 </Layout>
