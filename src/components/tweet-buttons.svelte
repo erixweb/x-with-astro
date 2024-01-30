@@ -18,7 +18,7 @@
 	const currentPost: Post | null = existingPosts.find((post: Post) => post.id === id) || null
 
 	const post: Post = {
-		id: id,
+		id,
 		liked: currentPost?.liked ?? false,
 	}
 	/*

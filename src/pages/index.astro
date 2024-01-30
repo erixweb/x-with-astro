@@ -14,6 +14,7 @@ const session = await getSession(Astro.request)
 await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_name TEXT,
+		user_mail TEXT,
 		user_photo TEXT,
 		message TEXT,
 		timestamp DATE DEFAULT (datetime('now','localtime'))
@@ -44,7 +45,7 @@ const { rows } = await turso.execute("SELECT id, user_name, user_photo, message,
 		<ComposePost client:load />
 		{
 			rows.map((post) => (
-				<Post userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} />
+				<Post id={`${post.id}`} userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} />
 			))
 		}
 	</main>
