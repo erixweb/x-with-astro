@@ -11,7 +11,11 @@
 		})
 		const data = await response.json()
 		responseMessage = data.message
+		if (responseMessage) {
+			window.location.reload()
+		}
 	}
+
 </script>
 
 <form
@@ -40,7 +44,4 @@
 			/>
 		</div>
 	</div>
-	{#if responseMessage}
-		{responseMessage}
-	{/if}
 </form>

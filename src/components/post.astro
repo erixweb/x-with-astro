@@ -1,4 +1,5 @@
 ---
+import Trash from "./icons/trash.astro"
 import TweetButtons from "./tweet-buttons.svelte"
 
 interface Props {
@@ -15,16 +16,7 @@ const getTimeDiff = (date: any) => {
 	const postDate = new Date(date)
 	const currentDate = new Date()
 
-	//console.log(currentDate.getDate() - postDate.getDate())
-	if (postDate.getDate() - currentDate.getDate() === 0) {
-		if (postDate.getMinutes() - currentDate.getMinutes() === 0) {
-			return `${currentDate.getSeconds() - postDate.getSeconds()}s`
-		} else {
-			return `${currentDate.getMinutes() - postDate.getMinutes()}min`
-		}
-	} else {
-		return `${postDate.getHours() - currentDate.getHours()}h`
-	}
+	return currentDate - postDate
 }
 ---
 
@@ -45,9 +37,9 @@ const getTimeDiff = (date: any) => {
 					{getTimeDiff(date)}
 				</p>
 			</div>
-            <div onclick={`fetch('/api/delete?id=${id}'); this.disabled = 'true'`} class=" disabled:opacity-50">
-                delete
-            </div>
+            <button onclick={`fetch('/api/delete?id=${id}'); this.disabled = 'true'; window.location.reload()`} class=" disabled:opacity-50">
+                <Trash />
+            </button>
 		</div>
 		<p>
 			{content}
