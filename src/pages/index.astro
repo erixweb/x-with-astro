@@ -11,6 +11,7 @@ const session = await getSession(Astro.request)
 //console.log(session)
 //await turso.execute("DROP TABLE posts")
 //await turso.execute("DELETE * FROM posts")
+/*
 await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_name TEXT,
@@ -19,44 +20,45 @@ await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		message TEXT,
 		timestamp DATE DEFAULT (datetime('now','localtime'))
 )`)
-
-const { rows } = await turso.execute("SELECT id, user_name, user_photo, message, timestamp FROM posts ORDER BY timestamp DESC")
-
-
+*/
+const { rows } = await turso.execute(
+	"SELECT id, user_name, user_photo, message, timestamp FROM posts ORDER BY timestamp DESC"
+)
 ---
 
 <Layout>
 	<main class="max-w-[40em] p-[16px] flex flex-col gap-[20px]">
-		{
-			session ? (
-				""
-			) : (
-				<button
-					id="login"
-					class="bg-slate-900 py-[6px] px-[16px] rounded-[7px] inline-flex border-slate-600 border-[1px]"
-				>
-					<span class="inline-flex gap-[20px]">
-						<Github />
-						Iniciar sessió
-					</span>
-				</button>
-			)
-		}
-		<ComposePost client:load />
+	{
+		session ? (
+			""
+		) : (
+			<button
+				id="login"
+				class="bg-slate-900 py-[6px] px-[16px] rounded-[7px] inline-flex border-slate-600 border-[1px]"
+			>
+				<span class="inline-flex gap-[20px]">
+					<Github />
+					Iniciar sessió
+				</span>
+			</button>
+		)
+	}
+	<ComposePost client:load />
+	
 		{
 			rows.map((post) => (
 				<Post id={`${post.id}`} userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} />
 			))
 		}
 	</main>
-	<script>
-		const { signIn } = await import("auth-astro/client")
-		const $button = document.getElementById("login")
-
-		$button?.addEventListener("click", async (ev) => {
-			ev.preventDefault()
-
-			await signIn("github")
-		})
-	</script>
 </Layout>
+<script>
+	const { signIn } = await import("auth-astro/client")
+	const $button = document.getElementById("login")
+
+	$button?.addEventListener("click", async (ev) => {
+		ev.preventDefault()
+
+		await signIn("github")
+	})
+</script>
