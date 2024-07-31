@@ -1,4 +1,5 @@
 ---
+import type { Session } from "@auth/core/types"
 import Trash from "./icons/trash.astro"
 import TweetButtons from "./tweet-buttons.svelte"
 
@@ -8,16 +9,20 @@ interface Props {
 	content: string
 	date: string
 	profilePicture: string
+	user_mail: Value
+	session: Session | null
 }
 
-const { userFullName, content, id, date, profilePicture } = Astro.props
+const { userFullName, content, id, date, profilePicture, session, user_mail } = Astro.props
 
 const getTimeDiff = (date: any) => {
 	const postDate = new Date(date)
 	const currentDate = new Date()
 
-	return currentDate - postDate
+	return new Date(currentDate - postDate).getSeconds()
 }
+console.log(id)
+console.log()
 ---
 
 <div class="flex justify-start bg-slate-700 p-[16px] rounded-[12px] w-full" {id}>
@@ -33,13 +38,20 @@ const getTimeDiff = (date: any) => {
 			<div class="w-full flex gap-[8px]">
 				<h3>{userFullName}</h3>
 				·
-				<p class=" text-slate-400">
+				<p class="text-slate-400">
 					{getTimeDiff(date)}
 				</p>
 			</div>
-            <button onclick={`fetch('/api/delete?id=${id}'); this.disabled = 'true'; window.location.reload()`} class=" disabled:opacity-50">
-                <Trash />
-            </button>
+			{
+				session?.user?.email === user_mail ? (
+					<button
+						onclick={`fetch('/api/delete?id=${id}'); this.disabled = 'true'; `}
+						class=" disabled:opacity-50"
+					>
+						<Trash />
+					</button>
+				) : null
+			}
 		</div>
 		<p>
 			{content}

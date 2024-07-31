@@ -11,7 +11,7 @@ const session = await getSession(Astro.request)
 //console.log(session)
 //await turso.execute("DROP TABLE posts")
 //await turso.execute("DELETE * FROM posts")
-/*
+
 await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		user_name TEXT,
@@ -20,9 +20,8 @@ await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		message TEXT,
 		timestamp DATE DEFAULT (datetime('now','localtime'))
 )`)
-*/
 const { rows } = await turso.execute(
-	"SELECT id, user_name, user_photo, message, timestamp FROM posts ORDER BY timestamp DESC"
+	"SELECT id, user_name, user_photo, message, timestamp, user_mail FROM posts ORDER BY timestamp DESC"
 )
 ---
 
@@ -47,7 +46,7 @@ const { rows } = await turso.execute(
 	
 		{
 			rows.map((post) => (
-				<Post id={`${post.id}`} userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} />
+				<Post id={`${post.id}`} userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} user_mail={post.user_mail} session={session} />
 			))
 		}
 	</main>
