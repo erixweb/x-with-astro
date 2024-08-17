@@ -15,11 +15,10 @@
 			window.location.reload()
 		}
 	}
-
 </script>
 
 <form
-	class="w-full flex flex-row justify-start gap-[20px] border-y-2 border-slate-500 p-[16px]"
+	class="w-full flex flex-row justify-start gap-[20px] border-y-2 border-slate-500 p-[16px] relative"
 	on:submit={submit}
 >
 	<div class="max-w-[50px] ml-0 mt-0">
@@ -33,15 +32,11 @@
 		<textarea
 			placeholder="¿Qué está pasando?"
 			name="message"
-			class="bg-transparent resize-none ml-[0px] outline-none"
+			class="bg-transparent resize-none min-h-[100px] ml-[0px] outline-none relative"
 			bind:value={input}
 		/>
-		<div class="mr-[0px]">
-			<input
-				type="submit"
-				value="Postear"
-				class="bg-sky-500 max-w-[100px] font-semibold p-[8px] rounded-[15px] mr-[0px] cursor-pointer"
-			/>
-		</div>
+		<div class="mr-[0px]"> <input type="submit" value="Postear" class="bg-sky-500
+			max-w-[100px] font-semibold p-[8px] rounded-[15px] mr-[0px] cursor-pointer absolute
+			bottom-[20px] right-[0px]" /> </div>
 	</div>
 </form>

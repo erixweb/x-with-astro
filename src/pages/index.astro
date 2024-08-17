@@ -23,30 +23,38 @@ await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 const { rows } = await turso.execute(
 	"SELECT id, user_name, user_photo, message, timestamp, user_mail FROM posts ORDER BY timestamp DESC"
 )
+
 ---
 
 <Layout>
 	<main class="max-w-[40em] p-[16px] flex flex-col gap-[20px]">
-	{
-		session ? (
-			""
-		) : (
-			<button
-				id="login"
-				class="bg-slate-900 py-[6px] px-[16px] rounded-[7px] inline-flex border-slate-600 border-[1px]"
-			>
-				<span class="inline-flex gap-[20px]">
-					<Github />
-					Iniciar sessió
-				</span>
-			</button>
-		)
-	}
-	<ComposePost client:load />
-	
+		{
+			session ? (
+				""
+			) : (
+				<button
+					id="login"
+					class="bg-slate-900 py-[6px] px-[16px] rounded-[7px] inline-flex border-slate-600 border-[1px]"
+				>
+					<span class="inline-flex gap-[20px]">
+						<Github />
+						Iniciar sessió
+					</span>
+				</button>
+			)
+		}
+		{session ? <ComposePost client:load /> : null}
 		{
 			rows.map((post) => (
-				<Post id={`${post.id}`} userFullName={`${post.user_name}`} content={`${post.message}`} date={`${post.timestamp}`} profilePicture={`${post.user_photo}`} user_mail={post.user_mail} session={session} />
+				<Post
+					id={`${post.id}`}
+					userFullName={`${post.user_name}`}
+					content={`${post.message}`}
+					date={`${post.timestamp}`}
+					profilePicture={`${post.user_photo}`}
+					user_mail={post.user_mail}
+					session={session}
+				/>
 			))
 		}
 	</main>
