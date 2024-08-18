@@ -5,6 +5,7 @@
 	import Retweet from "./icons/retweet.svelte"
 
 	export let id: string
+	export let likes: number
 
 	let liked = false
 	let retweeted = false
@@ -21,6 +22,18 @@
 		id,
 		liked: currentPost?.liked ?? false,
 	}
+
+	async function like () {
+		post.liked = !post.liked
+
+		likes++
+		const req = await fetch(`/api/like?id=${post.id}`)
+
+		if (req.status === 500) {
+			post.liked = false
+			likes--
+		}
+	}
 	/*
     const oldStorage = localStorage.getItem("posts")
 
@@ -32,8 +45,8 @@
 </script>
 
 <div class="flex gap-[20px] mt-[20px]">
-	<button on:click={() => (post.liked = !post.liked)}>
-		<Like liked={post.liked} />
+	<button on:click={like} class="flex gap-[10px] items-center justify-center align-middle">
+		<Like liked={post.liked} /> {likes}
 	</button>
 	<button on:click={() => (retweeted = !retweeted)}>
 		<Retweet {retweeted} />

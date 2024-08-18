@@ -20,6 +20,11 @@ await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 		message TEXT,
 		timestamp DATE DEFAULT (datetime('now','localtime'))
 )`)
+await turso.execute(`CREATE TABLE IF NOT EXISTS likes (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		post_id INTEGER,
+		user_name TEXT
+)`)
 const { rows } = await turso.execute(
 	"SELECT id, user_name, user_photo, message, timestamp, user_mail FROM posts ORDER BY timestamp DESC"
 )

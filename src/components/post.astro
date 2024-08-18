@@ -2,6 +2,7 @@
 import type { Session } from "@auth/core/types"
 import Trash from "./icons/trash.astro"
 import TweetButtons from "./tweet-buttons.svelte"
+import { turso } from "../turso"
 
 interface Props {
 	id: string
@@ -9,7 +10,7 @@ interface Props {
 	content: string
 	date: string
 	profilePicture: string
-	user_mail: Value
+	user_mail: any
 	session: Session | null
 }
 
@@ -21,6 +22,9 @@ const getTimeDiff = (date: any) => {
 
 	return new Date(currentDate - postDate).getMinutes()
 }
+
+const likes = (await turso.execute(`SELECT  * from likes WHERE post_id = ${id}`)).rows.length
+
 ---
 
 <div class="flex justify-start bg-slate-700 p-[16px] rounded-[12px] w-full" {id}>
@@ -54,6 +58,6 @@ const getTimeDiff = (date: any) => {
 		<p>
 			{content}
 		</p>
-		<TweetButtons id={id} client:load />
+		<TweetButtons likes={likes} id={id} client:load />
 	</div>
 </div>
