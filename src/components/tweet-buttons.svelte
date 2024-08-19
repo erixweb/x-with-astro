@@ -6,6 +6,7 @@
 
 	export let id: string
 	export let likes: number
+	export let sessionEmail
 
 	let liked = false
 	let retweeted = false
@@ -16,42 +17,45 @@
 		existingPosts = value
 	})
 
-	const currentPost: Post | null = existingPosts.find((post: Post) => post.id === id) || null
+	console.log(existingPosts)
+
+	const currentPost: Post | null = existingPosts.find((post: Post) => post.id == id) || null
+
+	const userLiked = [currentPost?.user_id].findIndex((val) => val === sessionEmail)
 
 	const post: Post = {
 		id,
-		liked: currentPost?.liked ?? false,
+		liked: userLiked == 0 ? true : false,
+		user_id: currentPost?.user_id
 	}
 
-	async function like () {
+	async function like() {
 		post.liked = !post.liked
 
-		likes++
-		const req = await fetch(`/api/like?id=${post.id}`)
 
-		if (req.status === 500) {
+		if (post.liked) likes++
+
+		const req = await fetch(`/api/like?id=${parseInt(post.id)}`)
+		const res = await req.json()
+
+		if (req.status === 500 || res.message === "Delete") {
 			post.liked = false
 			likes--
 		}
 	}
-	/*
-    const oldStorage = localStorage.getItem("posts")
-
-    localStorage.setItem('posts', oldStorage + JSON.stringify([{
-        id: id,
-        liked: post.liked
-    }]))
-    */
 </script>
 
-<div class="flex gap-[20px] mt-[20px]">
-	<button on:click={like} class="flex gap-[10px] items-center justify-center align-middle">
-		<Like liked={post.liked} /> {likes}
-	</button>
-	<button on:click={() => (retweeted = !retweeted)}>
-		<Retweet {retweeted} />
-	</button>
-	<button on:click={() => (bookmarked = !bookmarked)}>
-		<Bookmark {bookmarked} />
-	</button>
-</div>
+{#if existingPosts && post}
+	<div class="flex gap-[20px] mt-[20px]">
+		<button on:click={like} class="flex gap-[10px] items-center justify-center align-middle">
+			<Like liked={post.liked} />
+			{likes}
+		</button>
+		<button on:click={() => (retweeted = !retweeted)}>
+			<Retweet {retweeted} />
+		</button>
+		<button on:click={() => (bookmarked = !bookmarked)}>
+			<Bookmark {bookmarked} />
+		</button>
+	</div>
+{/if}

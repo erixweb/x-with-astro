@@ -6,10 +6,11 @@ import Post from "../components/post.astro"
 import ComposePost from "../components/compose-post.svelte"
 import Github from "../components/icons/github.astro"
 import { getSession } from "auth-astro/server"
+import UpdateRows from "../components/update-rows.svelte"
 
 const session = await getSession(Astro.request)
 //console.log(session)
-//await turso.execute("DROP TABLE posts")
+//await turso.execute("DROP TABLE likes")
 //await turso.execute("DELETE * FROM posts")
 
 await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
@@ -23,15 +24,21 @@ await turso.execute(`CREATE TABLE IF NOT EXISTS posts (
 await turso.execute(`CREATE TABLE IF NOT EXISTS likes (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		post_id INTEGER,
-		user_name TEXT
+		user_id TEXT
 )`)
+
 const { rows } = await turso.execute(
-	"SELECT id, user_name, user_photo, message, timestamp, user_mail FROM posts ORDER BY timestamp DESC"
+	`SELECT p.id, p.user_name, p.user_photo, p.message, p.timestamp, p.user_mail, l.user_id
+	FROM posts as p
+	LEFT OUTER JOIN likes as l
+	on p.id = l.post_id 
+	ORDER BY timestamp DESC`
 )
 
 ---
 
 <Layout>
+	<UpdateRows rows={rows} client:load />
 	<main class="max-w-[40em] p-[16px] flex flex-col gap-[20px]">
 		{
 			session ? (

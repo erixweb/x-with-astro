@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ request }) => {
 			})
 		)
 
-	
+	/*
 	if (rows[0].user_mail === session.user?.email) {
 		return new Response(
 			JSON.stringify({
@@ -35,21 +35,30 @@ export const GET: APIRoute = async ({ request }) => {
 			{ status: 500 }
 		)
 	}
-    
+		*/
 
-    const hasLiked = (await turso.execute(`SELECT id FROM likes WHERE user_name = "${session.user?.email}"`)).rows.length
+	const hasLiked = (
+		await turso.execute(`SELECT id FROM likes WHERE user_id = "${session.user?.email} AND post_id = ${postID}"`)
+	).rows.length
 
-
-    if (hasLiked > 0) {
-        turso.execute(`DELETE FROM likes WHERE user_name = "${session.user?.email}"`)
-    } else {
-        turso.execute(`INSERT INTO likes(post_id, user_name) VALUES ( ${postID}, "${session.user?.email}" )`)
-    }
-
+	console.log(hasLiked)
+	if (hasLiked > 0) {
+		turso.execute(`DELETE FROM likes WHERE user_id = "${session.user?.email}"`)
+		return new Response(
+			JSON.stringify({
+				message: "Delete",
+			}),
+			{ status: 200 }
+		)
+	} else {
+		turso.execute(
+			`INSERT INTO likes(post_id, user_id) VALUES ( ${postID}, "${session.user?.email}" )`
+		)
+	}
 
 	return new Response(
 		JSON.stringify({
-			message: "Success",
+			message: "Added like",
 		}),
 		{ status: 200 }
 	)
