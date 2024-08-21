@@ -38,8 +38,10 @@ export const GET: APIRoute = async ({ request }) => {
 		*/
 
 	const hasLiked = (
-		await turso.execute(`SELECT id FROM likes WHERE user_id = "${session.user?.email} AND post_id = ${postID}"`)
+		await turso.execute(`SELECT id FROM likes WHERE user_id = "${session.user?.email}" AND post_id = ${postID}`)
 	).rows.length
+
+	
 
 	console.log(hasLiked)
 	if (hasLiked > 0) {
